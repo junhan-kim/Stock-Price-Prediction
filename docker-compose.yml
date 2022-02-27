@@ -1,0 +1,57 @@
+version: "3"
+networks:
+  proxynet:
+    driver: bridge
+
+services:
+  db:
+    container_name: db
+    image: postgres:latest
+    restart: always
+    networks:
+      - proxynet
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=940416
+      - POSTGRES_DB=devlog
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    build: ./backend
+    restart: always
+    networks:
+      - proxynet
+    ports:
+      - "5000:5000"
+    command: gunicorn -w 2 -b :5000 wsgi:server
+    depends_on:
+      - db
+    links:
+      - db:db
+
+  nginx:
+    container_name: nginx
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - proxynet
+    depends_on:
+      - backend
+    links:
+      - backend:backend
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    volumes:
+      - "/node_modules:/node_modules"
+    ports:
+      - "3001:3000"
+    environment:
+      - NODE_ENV=development
