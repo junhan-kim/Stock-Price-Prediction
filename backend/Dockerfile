@@ -5,7 +5,7 @@ RUN apt-get install -y python3-psycopg2
 RUN ln -s /usr/bin/python3 /usr/bin/python
 RUN ln -s /usr/bin/pip3 /usr/bin/pip
 
-ENV DATABASE_URL postgresql://postgres:940416@db/devlog
+ENV DATABASE_URL postgresql://postgres:940416@db/main
 ENV SECRET_KEY secret
 ENV EXEC_ENV dev
 ENV WHITE_LISTS '["http://localhost:3001"]'

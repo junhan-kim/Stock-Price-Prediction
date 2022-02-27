@@ -15,7 +15,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=940416
-      - POSTGRES_DB=devlog
+      - POSTGRES_DB=main
     volumes:
       - ./data/postgresql:/var/lib/postgresql/data
 
